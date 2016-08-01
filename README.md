@@ -1,4 +1,4 @@
-# A Simple Demo for Facebook Ads integration on iOS
+# A Simple Demo for Facebook Ads integration in iOS Apps
 
 Facebook ads consist of a nice way to embed advertisements in your apps and make some money out of them if they gain significant visibility. The process to get there (to embed ads) is not complicated at all, as Facebook SDK (an SDK with frameworks made by Facebook) contains an ad-related framework called Audience Network. That framework is pretty much all you need for having ads being served inside an app.
 
