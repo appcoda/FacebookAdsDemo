@@ -298,6 +298,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.AdsTutorial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AdsTutorial/AdsTutorial-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -314,6 +315,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.appcoda.AdsTutorial;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "AdsTutorial/AdsTutorial-Bridging-Header.h";
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
