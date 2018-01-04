@@ -30,25 +30,25 @@ class SingleAdsViewController: UIViewController, FBNativeAdDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        viewAdContainer.hidden = true
+        
+        viewAdContainer.isHidden = true
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     /*
-    // MARK: - Navigation
+     // MARK: - Navigation
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     
     
@@ -64,12 +64,11 @@ class SingleAdsViewController: UIViewController, FBNativeAdDelegate {
         
         nativeAd = FBNativeAd(placementID: "PLACEMENT_ID")
         nativeAd.delegate = self
-        nativeAd.loadAd()
+        nativeAd.load()
     }
  
     
     // MARK: Custom Methods
-
     func handleLoadedNativeAdUsingCustomViews() {
         // Set the ad title.
         lblAdTitle.text = nativeAd.title
@@ -80,10 +79,10 @@ class SingleAdsViewController: UIViewController, FBNativeAdDelegate {
         }
         
         // Set the title of the call-to-action button.
-        btnAdAction.setTitle(nativeAd.callToAction, forState: UIControlState.Normal)
+        btnAdAction.setTitle(nativeAd.callToAction, for: UIControlState.normal)
         
         // Load and display the ad icon image.
-        nativeAd.icon?.loadImageAsyncWithBlock({ (iconImage) in
+        nativeAd.icon?.loadAsync(block: { (iconImage) in
             if let image = iconImage {
                 self.imgAdIcon.image = image
             }
@@ -91,7 +90,7 @@ class SingleAdsViewController: UIViewController, FBNativeAdDelegate {
         
         // Create a cover media view and assign the native ad object to it (it will display image(s) or video, depending on what ad contains).
         let yPoint = lblAdBody.frame.origin.y + lblAdBody.frame.size.height + 8.0
-        let coverMediaViewFrame = CGRectMake(lblAdBody.frame.origin.x, yPoint, lblAdBody.frame.size.width, lblSocialContext.frame.origin.y - yPoint - 8.0)
+        let coverMediaViewFrame = CGRect(x: lblAdBody.frame.origin.x, y: yPoint, width: lblAdBody.frame.size.width, height:lblSocialContext.frame.origin.y - yPoint - 8.0)
         let coverMediaView = FBMediaView(frame: coverMediaViewFrame)
         coverMediaView.clipsToBounds = true
         coverMediaView.nativeAd = nativeAd
@@ -114,50 +113,51 @@ class SingleAdsViewController: UIViewController, FBNativeAdDelegate {
         // nativeAd.registerViewForInteraction(viewAdContainer, withViewController: self)
         
         // Use this to make the call-to-action interactive only.
-        nativeAd.registerViewForInteraction(viewAdContainer, withViewController: self, withClickableViews: [btnAdAction])
+        nativeAd.registerView(forInteraction: viewAdContainer, with: self, withClickableViews: [btnAdAction])
         
         
         // Make the native ad view container visible.
-        viewAdContainer.hidden = false
+        viewAdContainer.isHidden = false
     }
     
     
     func handleLoadedNativeAdUsingTemplate() {
         let attributes = FBNativeAdViewAttributes()
-        attributes.buttonColor = UIColor.magentaColor()
-        attributes.buttonTitleColor = UIColor.yellowColor()
-        attributes.backgroundColor = UIColor.purpleColor()
+        attributes.buttonColor = UIColor.magenta
+        attributes.buttonTitleColor = UIColor.yellow
+        attributes.backgroundColor = UIColor.purple
         attributes.titleFont = UIFont(name: "Noteworthy", size: 20.0)
-        attributes.titleColor = UIColor.whiteColor()
+        attributes.titleColor = UIColor.white
         attributes.buttonTitleFont = UIFont(name: "Futura", size: 12.0)
-        attributes.descriptionColor = UIColor.whiteColor()
+        attributes.descriptionColor = UIColor.white
         
-        let nativeAdView = FBNativeAdView(nativeAd: nativeAd, withType: FBNativeAdViewType.GenericHeight300, withAttributes: attributes)
-        // let nativeAdView = FBNativeAdView(nativeAd: nativeAd, withType: FBNativeAdViewType.GenericHeight300)
-        nativeAdView.frame = CGRectMake(20.0, 100.0, UIScreen.mainScreen().bounds.size.width - 40.0, 300.0)
+        let nativeAdView = FBNativeAdView(nativeAd: nativeAd, with: FBNativeAdViewType.genericHeight300, with: attributes)
+        
+        nativeAdView.frame = CGRect(x:20.0, y:100.0, width:UIScreen.main.bounds.size.width - 40.0, height: 300.0)
         self.view.addSubview(nativeAdView)
         
-        nativeAd.registerViewForInteraction(nativeAdView, withViewController: self)
+        nativeAd.registerView(forInteraction: nativeAdView, with: self)
     }
     
     
     
     // MARK: FBNativeAdDelegate Methods
     
-    func nativeAdDidLoad(nativeAd: FBNativeAd) {
+    func nativeAdDidLoad(_ nativeAd: FBNativeAd) {
         // handleLoadedNativeAdUsingCustomViews()
         
         handleLoadedNativeAdUsingTemplate()
     }
     
     
-    func nativeAd(nativeAd: FBNativeAd, didFailWithError error: NSError) {
+    func nativeAd(_ nativeAd: FBNativeAd, didFailWithError error: Error) {
         print(error)
     }
     
     
-    func nativeAdDidClick(nativeAd: FBNativeAd) {
+    func nativeAdDidClick(_ nativeAd: FBNativeAd) {
         print("Did tap on the ad")
     }
     
 }
+
