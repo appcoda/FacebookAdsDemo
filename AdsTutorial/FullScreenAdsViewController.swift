@@ -18,10 +18,10 @@ class FullScreenAdsViewController: UIViewController, FBInterstitialAdDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -31,31 +31,29 @@ class FullScreenAdsViewController: UIViewController, FBInterstitialAdDelegate {
     @IBAction func showFullScreenAd(sender: AnyObject) {
         fullScreenAd = FBInterstitialAd(placementID: "PLACEMENT_ID")
         fullScreenAd.delegate = self
-        fullScreenAd.loadAd()
-        btnShowAd.enabled = false
+        fullScreenAd.load()
+        btnShowAd.isEnabled = false
     }
 
     
     // MARK: FBInterstitialAdDelegate Methods
     
-    func interstitialAdDidLoad(interstitialAd: FBInterstitialAd) {
-        interstitialAd.showAdFromRootViewController(self)
-        btnShowAd.enabled = true
+    func interstitialAdDidLoad(_ interstitialAd: FBInterstitialAd) {
+        interstitialAd.show(fromRootViewController: self)
+        btnShowAd.isEnabled = true
     }
     
-    
-    func interstitialAd(interstitialAd: FBInterstitialAd, didFailWithError error: NSError) {
+    func interstitialAd(_ interstitialAd: FBInterstitialAd, didFailWithError error: Error) {
         print(error)
-        btnShowAd.enabled = true
+        btnShowAd.isEnabled = true
     }
     
-    
-    func interstitialAdDidClick(interstitialAd: FBInterstitialAd) {
+    func interstitialAdDidClick(_ interstitialAd: FBInterstitialAd) {
         print("Did tap on ad")
     }
     
     
-    func interstitialAdDidClose(interstitialAd: FBInterstitialAd) {
+    func interstitialAdDidClose(_ interstitialAd: FBInterstitialAd) {
         print("Did close ad")
     }
 }

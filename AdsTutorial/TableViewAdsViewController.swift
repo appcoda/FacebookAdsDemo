@@ -13,24 +13,22 @@ class TableViewAdsViewController: UIViewController, UITableViewDelegate, UITable
     @IBOutlet weak var tblAdsDemo: UITableView!
     
     
+    var sampleData = [String]()
+    
     let adRowStep = 4
     
     var adsManager: FBNativeAdsManager!
     
     var adsCellProvider: FBNativeAdTableViewCellProvider!
     
-    
-    var sampleData = [String]()
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
-
     
-    override func viewWillAppear(animated: Bool) {
+    
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         createFakeData()
@@ -46,13 +44,13 @@ class TableViewAdsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-
+    
     // MARK: Custom Methods
     
     func configureTableView() {
         tblAdsDemo.delegate = self
         tblAdsDemo.dataSource = self
-        tblAdsDemo.registerNib(UINib(nibName: "SampleCell", bundle: nil), forCellReuseIdentifier: "idCellSample")
+        tblAdsDemo.register(UINib(nibName: "SampleCell", bundle: nil), forCellReuseIdentifier: "idCellSample")
         tblAdsDemo.reloadData()
     }
     
@@ -62,16 +60,6 @@ class TableViewAdsViewController: UIViewController, UITableViewDelegate, UITable
             sampleData.append("Sample Content #\(i+1)")
         }
     }
-
-    
-    func configureAdManagerAndLoadAds() {
-        if adsManager == nil {
-            adsManager = FBNativeAdsManager(placementID: "PLACEMENT_ID", forNumAdsRequested: 5)
-            adsManager.delegate = self
-            adsManager.loadAds()
-        }
-    }
-    
     
     
     // MARK: UITableView Delegate and Datasource methods
@@ -81,43 +69,51 @@ class TableViewAdsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if adsCellProvider != nil {
             return Int(adsCellProvider.adjustCount(UInt(self.sampleData.count), forStride: UInt(adRowStep)))
         }
         else {
             return sampleData.count
         }
+        
     }
     
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if adsCellProvider != nil && adsCellProvider.isAdCellAtIndexPath(indexPath, forStride: UInt(adRowStep)) {
-            return adsCellProvider.tableView(tableView, cellForRowAtIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if adsCellProvider != nil && adsCellProvider.isAdCell(at: indexPath, forStride: UInt(adRowStep)) {
+            return adsCellProvider.tableView(tableView, cellForRowAt: indexPath)
         }
         else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("idCellSample", forIndexPath: indexPath) as! SampleCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "idCellSample", for: indexPath) as! SampleCell
             cell.lblTitle.text = sampleData[indexPath.row - Int(indexPath.row / adRowStep)]
             return cell
         }
     }
     
     
-    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-        if adsCellProvider != nil && adsCellProvider.isAdCellAtIndexPath(indexPath, forStride: UInt(adRowStep)) {
-            return adsCellProvider.tableView(tableView, heightForRowAtIndexPath: indexPath)
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        if adsCellProvider != nil && adsCellProvider.isAdCell(at: indexPath as IndexPath, forStride: UInt(adRowStep)) {
+            return adsCellProvider.tableView(tableView, heightForRowAt: indexPath as IndexPath)
         }
         else {
             return 60.0
         }
     }
     
-    
+    func configureAdManagerAndLoadAds() {
+        if adsManager == nil {
+            adsManager = FBNativeAdsManager(placementID: "PLACEMENT_ID", forNumAdsRequested: 5)
+            adsManager.delegate = self
+            adsManager.loadAds()
+        }
+    }
     
     // MARK: FBNativeAdsManagerDelegate Methods
     
     func nativeAdsLoaded() {
-        adsCellProvider = FBNativeAdTableViewCellProvider(manager: adsManager, forType: FBNativeAdViewType.GenericHeight120)
+        adsCellProvider = FBNativeAdTableViewCellProvider(manager: adsManager, for: FBNativeAdViewType.genericHeight120)
         adsCellProvider.delegate = self
         
         if tblAdsDemo != nil {
@@ -126,7 +122,7 @@ class TableViewAdsViewController: UIViewController, UITableViewDelegate, UITable
     }
     
     
-    func nativeAdsFailedToLoadWithError(error: NSError) {
+    func nativeAdsFailedToLoadWithError(_ error: Error) {
         print(error)
     }
     
@@ -134,7 +130,7 @@ class TableViewAdsViewController: UIViewController, UITableViewDelegate, UITable
     
     // MARK: FBNativeAdDelegate Methods
     
-    func nativeAdDidClick(nativeAd: FBNativeAd) {
-        print("Ad tapped: \(nativeAd.title)")
+    func nativeAdDidClick(_ nativeAd: FBNativeAd) {
+        print("Ad tapped: \(String(describing: nativeAd.title))")
     }
 }

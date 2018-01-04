@@ -15,10 +15,10 @@ class BannerAdsViewController: UIViewController, FBAdViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -27,9 +27,9 @@ class BannerAdsViewController: UIViewController, FBAdViewDelegate {
 
     @IBAction func loadBannerAd(sender: AnyObject) {
         bannerAdView = FBAdView(placementID: "PLACEMENT_ID", adSize: kFBAdSizeHeight50Banner, rootViewController: self)
-        bannerAdView.frame = CGRectMake(0.0, 20.0, UIScreen.mainScreen().bounds.size.width, 50.0)
+        bannerAdView.frame = CGRect(x:0.0, y:20.0, width:UIScreen.main.bounds.size.width, height:50.0)
         bannerAdView.delegate = self
-        bannerAdView.hidden = true
+        bannerAdView.isHidden = true
         self.view.addSubview(bannerAdView)
         
         bannerAdView.loadAd()
@@ -39,16 +39,16 @@ class BannerAdsViewController: UIViewController, FBAdViewDelegate {
     
     // MARK: FBAdViewDelegate Methods
     
-    func adViewDidLoad(adView: FBAdView) {
-        bannerAdView.hidden = false
+    func adViewDidLoad(_ adView: FBAdView) {
+        bannerAdView.isHidden = false
     }
     
     
-    func adView(adView: FBAdView, didFailWithError error: NSError) {
+    func adView(_ adView: FBAdView, didFailWithError error: Error) {
         print(error)
     }
     
-    func adViewDidClick(adView: FBAdView) {
+    func adViewDidClick(_ adView: FBAdView) {
         print("Did tap on ad view")
     }
 }
